@@ -1,0 +1,203 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="UnregisteredClassReport" language="java" pageWidth="750" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="710" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1167a2b6-336d-4373-9708-8f49fdd03178">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FitWell"/>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<dataset name="UnregisteredDS" uuid="b0d1cd89-4b4f-4f62-b196-8ba50369cc81">
+		<parameter name="pStart" class="java.sql.Date"/>
+		<parameter name="pEnd" class="java.sql.Date"/>
+		<query language="sql"><![CDATA[
+SELECT
+    TblTrainee.ID AS traineeID,
+    TblTrainee.firstName,
+    TblTrainee.lastName,
+    TblTrainee.dateOfBirth,
+    TblTrainee.phoneNumber,
+    TblTrainee.email,
+    Count(SubQ.classID) AS totalClasses
+FROM
+    TblTrainee
+    LEFT JOIN (
+        SELECT
+            TblClassRegistrations.traineeID,
+            TblTrainingClass.classID
+        FROM
+            TblClassRegistrations
+            INNER JOIN TblTrainingClass
+                ON TblClassRegistrations.classID = TblTrainingClass.classID
+        WHERE
+            TblTrainingClass.status = 'COMPLETED'
+            AND TblTrainingClass.startTime >= $P{pStart}
+            AND TblTrainingClass.startTime < DateAdd("d", 1, $P{pEnd})
+    ) AS SubQ ON TblTrainee.ID = SubQ.traineeID
+GROUP BY
+    TblTrainee.ID,
+    TblTrainee.firstName,
+    TblTrainee.lastName,
+    TblTrainee.dateOfBirth,
+    TblTrainee.phoneNumber,
+    TblTrainee.email
+HAVING
+    Count(SubQ.classID) < 7
+ORDER BY
+    Count(SubQ.classID) DESC,
+    TblTrainee.lastName ASC,
+    TblTrainee.firstName ASC;
+		]]></query>
+		<field name="traineeID" class="java.lang.Integer"/>
+		<field name="firstName" class="java.lang.String"/>
+		<field name="lastName" class="java.lang.String"/>
+		<field name="dateOfBirth" class="java.sql.Date"/>
+		<field name="phoneNumber" class="java.lang.String"/>
+		<field name="email" class="java.lang.String"/>
+		<field name="totalClasses" class="java.lang.Integer"/>
+	</dataset>
+	<parameter name="pStart" class="java.sql.Date"/>
+	<parameter name="pEnd" class="java.sql.Date"/>
+	<query language="sql"><![CDATA[]]></query>
+	<title height="74" splitType="Stretch">
+		<element kind="staticText" uuid="4cb42040-64dc-4295-93c4-aa05e13ba15d" x="0" y="0" width="710" height="30" fontName="Arial" fontSize="18.0" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Unregistered Class Report]]></text>
+		</element>
+		<element kind="staticText" uuid="11111111-2222-3333-4444-555555555555" x="110" y="40" width="90" height="18" fontName="Arial" fontSize="12.0" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Start Date:]]></text>
+		</element>
+		<element kind="textField" uuid="66666666-7777-8888-9999-aaaaaaaaaaaa" x="200" y="40" width="120" height="18" fontName="Arial" fontSize="12.0" pattern="dd/MM/yyyy" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{pStart}]]></expression>
+		</element>
+		<element kind="staticText" uuid="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" x="410" y="40" width="70" height="18" fontName="Arial" fontSize="12.0" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[End Date:]]></text>
+		</element>
+		<element kind="textField" uuid="12345678-90ab-cdef-1234-567890abcdef" x="480" y="40" width="120" height="18" fontName="Arial" fontSize="12.0" pattern="dd/MM/yyyy" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{pEnd}]]></expression>
+		</element>
+	</title>
+	<columnHeader height="10" splitType="Stretch"/>
+	<detail>
+		<band height="1" splitType="Stretch"/>
+	</detail>
+	<summary height="320" splitType="Stretch">
+		<element kind="component" uuid="e3244b1a-f310-48f6-96bc-7a37e4a52d24" x="0" y="0" width="710" height="300">
+			<component kind="table">
+				<datasetRun uuid="26dc47cc-b3e6-44b0-a418-cb786474d238" subDataset="UnregisteredDS">
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<parameter name="pStart">
+						<expression><![CDATA[$P{pStart}]]></expression>
+					</parameter>
+					<parameter name="pEnd">
+						<expression><![CDATA[$P{pEnd}]]></expression>
+					</parameter>
+				</datasetRun>
+				<column kind="single" uuid="9acca1df-c8f4-4f72-bb41-6726110dd1f6" width="55">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="6e4c2cff-5e53-4771-bde0-0a3d8f45fdc9" x="0" y="0" width="55" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[ID]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="4ce5943e-07f8-4cc2-bcb4-6ba911a09ff5" x="0" y="0" width="55" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{traineeID}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="f9fee794-7869-4b0c-96e0-0d8b6a81a5eb" width="80">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="b92a6461-3b79-4d1c-8f4e-0a80295971c8" x="0" y="0" width="80" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[First Name]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="4a564133-4e9a-448a-b214-92085320264e" x="0" y="0" width="80" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{firstName}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="0a8e2c5d-8b88-4856-b392-e9a61453d920" width="80">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="1398ba1d-7cbc-4ce8-b438-6dad7854f667" x="0" y="0" width="80" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[Last Name]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="9069d753-16be-41ff-a9ee-18bfd03cdc61" x="0" y="0" width="80" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{lastName}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="d0b2a9a4-9f23-4b0f-9d0e-2f0b2f6a9e11" width="95">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="a7b1c0a1-1a2b-4c3d-9e8f-112233445566" x="0" y="0" width="95" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[Date of Birth]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="b8c2d1b2-2b3c-4d5e-8f90-223344556677" x="0" y="0" width="95" height="28" fontName="Arial" fontSize="11.0" pattern="dd/MM/yyyy" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{dateOfBirth}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="5134cb23-7c15-4187-beaf-fc9fa05cb361" width="105">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="77e6508a-64e0-4f52-8dd5-72e442c46c1b" x="0" y="0" width="105" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[Phone Number]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="09715095-4249-4a36-aabf-9dc6560d000b" x="0" y="0" width="105" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{phoneNumber}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="02a596e6-9022-45ee-b9b7-b60321e28691" width="230">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="10f2d6e6-c780-4a5d-a2c5-857ff4ee02d1" x="0" y="0" width="230" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[Email]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="957407c0-5aee-4d22-a922-d30daac81972" x="0" y="0" width="230" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{email}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+				<column kind="single" uuid="edb0f9ee-968e-476f-a792-0214aba373db" width="65">
+					<tableHeader height="30" rowSpan="1" style="Table 1_TH">
+						<element kind="staticText" uuid="d3cfd80a-544e-4f7a-bafc-566b39baa6d9" x="0" y="0" width="65" height="30" fontName="Arial" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+							<text><![CDATA[Classes]]></text>
+						</element>
+					</tableHeader>
+					<detailCell height="28" style="Table 1_TD">
+						<element kind="textField" uuid="f9b6145c-79ad-4254-9445-9ac456a6e791" x="0" y="0" width="65" height="28" fontName="Arial" fontSize="11.0" hTextAlign="Center" vTextAlign="Middle">
+							<expression><![CDATA[$F{totalClasses}]]></expression>
+						</element>
+					</detailCell>
+				</column>
+			</component>
+		</element>
+	</summary>
+</jasperReport>

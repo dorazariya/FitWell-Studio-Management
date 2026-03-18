@@ -1,0 +1,39 @@
+[
+  {
+    "typeName": "Leg Press",
+    "description": "Plate loaded machine for lower body strength",
+    "category": "Strength",
+    "totalQuantity": "40"
+  },
+  {
+    "typeName": "Plyo Box",
+    "description": "Wooden box for explosive jump training",
+    "category": "Cardio",
+    "totalQuantity": "65"
+  },
+  {
+    "typeName": "Pilates Ring",
+    "description": "Flexible fiberglass ring with soft padded grips",
+    "category": "Pilates",
+    "totalQuantity": "20"
+  },
+  {
+      "typeName": "Yoga Block",
+      "description": "",
+      "category": "Yoga",
+      "totalQuantity": "100",
+      "imageUrl": "https://cdn11.bigcommerce.com/s-zu9c0wie59/images/stencil/original/products/705/5062/Sunshine-Yoga-4-Yoga-Block-4-x-6-x-9_3457__03832.1740764216.jpg?c=2"
+  },
+  {
+    "typeName": "Balance Board",
+    "description": "Circular wooden board with black grip surface",
+    "category": "Strength",
+    "totalQuantity": "15"
+  },
+  {
+      "typeName": "Resistance Loop",
+      "description": "Set of five multi colored latex bands",
+      "category": "Strength",
+      "totalQuantity": "120"
+  }
+]
