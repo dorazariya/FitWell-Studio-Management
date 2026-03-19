@@ -1,4 +1,4 @@
-# FitWell - Fitness Group Management System
+# FitWell - Fitness Club Management System
 
 **FitWell** is a comprehensive management system for fitness groups and training, enabling user management, fitness plans, equipment, and class scheduling.
 
